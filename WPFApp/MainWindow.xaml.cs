@@ -26,6 +26,10 @@ namespace WPFApp
             {
                 bookingRoom.Customer = customer;
             }
+            if (historyBooking != null)
+            {
+                historyBooking.Customer = customer;
+            }
 
 
         }

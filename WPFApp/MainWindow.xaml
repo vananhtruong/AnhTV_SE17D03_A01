@@ -30,6 +30,9 @@
                 <TabItem Header="Booking" HorizontalAlignment="Right" Margin="0,-2,-2,0" Width="123">
                     <local:BookingRoom x:Name="bookingRoom"/>
                 </TabItem>
+                <TabItem Header="History booking" HorizontalAlignment="Right" Margin="0,-2,-2,0" Width="123">
+                    <local:HistoryBooking x:Name="historyBooking"/>
+                </TabItem>
             </TabControl>
             <Button Click="btnLogout_Click" Grid.ColumnSpan="2" Margin="510,10,88,579">
                 <StackPanel Orientation="Horizontal">
