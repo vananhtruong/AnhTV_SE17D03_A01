@@ -1,5 +1,5 @@
 ﻿using BussinessObject;
-using DataAccessLayer;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 
 namespace Repositories
 {
-    public class RoomTypeRepository : IRoomTypeRepository
+    public interface IBookingDetailRepository
     {
-        public List<RoomType> GetRoomTypes() => RoomTypeDAO.Instance().GetRoomTypes();
+        public List<BookingDetail> GetBookingById(int id);
     }
 }

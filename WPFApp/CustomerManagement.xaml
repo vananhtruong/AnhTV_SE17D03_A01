@@ -76,9 +76,9 @@
             <Button Content="Search" Click="btnSearch_Click"/>
         </StackPanel>
 
-        <DataGrid x:Name="dgCustomers" AutoGenerateColumns="False" CanUserAddRows="False" Grid.Row="1" SelectionMode="Single">
+        <DataGrid x:Name="dgCustomers" IsReadOnly="True" AutoGenerateColumns="False" CanUserAddRows="False" Grid.Row="1" SelectionMode="Single">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Customer ID" Binding="{Binding CustomerID}" Width="SizeToHeader"/>
+                <DataGridTextColumn Header="Customer ID" Binding="{Binding CustomerId}" Width="SizeToHeader"/>
                 <DataGridTextColumn Header="Full Name" Binding="{Binding CustomerFullName}" Width="*"/>
                 <DataGridTextColumn Header="Telephone" Binding="{Binding Telephone}" Width="SizeToHeader"/>
                 <DataGridTextColumn Header="Email Address" Binding="{Binding EmailAddress}" Width="*"/>

@@ -12,6 +12,7 @@ namespace WPFApp
     public partial class RoomManagement : UserControl
     {
         private readonly IRoomInformationService roomInformationService;
+        
 
         public RoomManagement()
         {
@@ -58,7 +59,6 @@ namespace WPFApp
             if (addEditRoomDialog.ShowDialog() == true)
             {
                 var newRoom = addEditRoomDialog.Room;
-                newRoom.RoomID = RoomInformationDAO.Generateint();
                 roomInformationService.SaveRoom(newRoom);
                 LoadData();
             }
@@ -88,7 +88,7 @@ namespace WPFApp
             {
                 if (MessageBox.Show($"Are you sure you want to delete Room {selectedRoom.RoomNumber}?", "Confirm Delete", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
                 {
-                    selectedRoom.RoomStatus = "Non-Active";
+                    selectedRoom.RoomStatus = 0;
                     //roomInformationService.UpdateRoom(selectedRoom);
                     roomInformationService.DeleteRoom(selectedRoom);
                     LoadData();

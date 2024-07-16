@@ -35,7 +35,7 @@ namespace Services
         {
             return iCustomerRepository.SearchCustomers(query);
         }
-        public Customer? CheckLogin(string email, string password)
+        public Customer CheckLogin(string email, string password)
         {
             return iCustomerRepository.CheckLogin(email, password);
         }

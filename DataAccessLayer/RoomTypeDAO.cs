@@ -9,27 +9,27 @@ namespace DataAccessLayer
 {
     public class RoomTypeDAO
     {
-        public static List<RoomType> GetRoomTypes()
+        private static RoomTypeDAO instance;
+        private readonly FuminiHotelManagementContext dbcontext;
+
+        public RoomTypeDAO()
         {
-            RoomType opera = new() { RoomTypeID = 1, RoomTypeName = "Opera", TypeDescription = "Opera is so good", TypeNote = "Normal" };
-            RoomType excute = new() { RoomTypeID = 2, RoomTypeName = "Excusitive Suit", TypeDescription = "Excusitive Suit is so good", TypeNote = "Luxury" };
-            RoomType duxule = new() { RoomTypeID = 3, RoomTypeName = "Duxule", TypeDescription = "Duxule is so good", TypeNote = "Special" };
-
-            var listCategories = new List<RoomType>();
-
-            try
+            if (instance == null)
             {
-                listCategories.Add(opera);
-                listCategories.Add(excute);
-                listCategories.Add(duxule);
-
+                dbcontext = new FuminiHotelManagementContext();
             }
-            catch (Exception e)
+        }
+        public static RoomTypeDAO Instance()
+        {
+            if (instance == null)
             {
-                throw new Exception(e.Message);
+                instance = new RoomTypeDAO();
             }
-
-            return listCategories;
+            return instance;
+        }
+        public List<RoomType> GetRoomTypes()
+        {
+            return dbcontext.RoomTypes.ToList();
         }
     }
 }

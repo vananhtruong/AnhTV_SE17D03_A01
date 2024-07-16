@@ -42,7 +42,7 @@
         <TextBox x:Name="txtTelephone" Margin="0,0,0,10"/>
 
         <Label Content="Email Address:"/>
-        <TextBox x:Name="txtEmail" Margin="0,0,0,10"/>
+        <TextBox x:Name="txtEmail" IsReadOnly="True" Margin="0,0,0,10"/>
 
         <Label Content="Password:"/>
         <StackPanel Width="580">

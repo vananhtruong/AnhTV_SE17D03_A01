@@ -10,11 +10,11 @@ namespace Repositories
 {
     public class RoomInformationRepository : IRoomInformationRepository
     {
-        public void SaveRoom(RoomInformation p) => RoomInformationDAO.SaveRoom(p);
-        public void UpdateRoom(RoomInformation p) => RoomInformationDAO.UpdateRoom(p);
-        public void DeleteRoom(RoomInformation p) => RoomInformationDAO.DeleteRoom(p);
-        public List<RoomInformation> SearchRoom(string query) => RoomInformationDAO.SearchRoom(query);
-        public List<RoomInformation> GetRoomInformations() => RoomInformationDAO.GetRoomInformations();
-        public RoomInformation GetRoomById(int id) => RoomInformationDAO.GetRoomById(id);
+        public void SaveRoom(RoomInformation p) => RoomInformationDAO.Instance().SaveRoom(p);
+        public void UpdateRoom(RoomInformation p) => RoomInformationDAO.Instance().UpdateRoom(p);
+        public void DeleteRoom(RoomInformation p) => RoomInformationDAO.Instance().DeleteRoom(p);
+        public List<RoomInformation> SearchRoom(string query) => RoomInformationDAO.Instance().SearchRoom(query);
+        public List<RoomInformation> GetRoomInformations() => RoomInformationDAO.Instance().GetRoomInformations();
+        public RoomInformation GetRoomById(int id) => RoomInformationDAO.Instance().GetRoomById(id);
     }
 }

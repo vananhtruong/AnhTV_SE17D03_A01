@@ -21,20 +21,29 @@ namespace WPFApp
 
         private void LoadData(object sender, RoutedEventArgs e)
         {
-            
+
 
             txtFullName.Text = Customer.CustomerFullName;
             txtEmail.Text = Customer.EmailAddress;
             txtTelephone.Text = Customer.Telephone;
             pwdPassword.Password = Customer.Password;
-            dpBirthday.SelectedDate = Customer.CustomerBirthday;
+            //dpBirthday.SelectedDate = Customer.CustomerBirthday.HasValue
+            //? Customer.CustomerBirthday.Value.ToDateTime(TimeOnly.MinValue)
+            //: (DateTime?)null;
+
+
+            //DateOnly to datetime
+            dpBirthday.SelectedDate = Customer.CustomerBirthday?.ToDateTime(TimeOnly.MinValue);
+
+
         }
 
         private async void btnUpdate_Click(object sender, RoutedEventArgs e)
         {
             Customer.CustomerFullName = txtFullName.Text;
             Customer.Telephone = txtTelephone.Text;
-            Customer.CustomerBirthday = dpBirthday.SelectedDate;
+            // datetime to dateonly
+            Customer.CustomerBirthday = DateOnly.FromDateTime(dpBirthday.SelectedDate.Value);
             Customer.Password = pwdPassword.Password;
 
             bool success = _customerService.UpdateProfile(Customer);

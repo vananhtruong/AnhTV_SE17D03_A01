@@ -1,4 +1,5 @@
 ﻿using BussinessObject;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,100 +10,127 @@ namespace DataAccessLayer
 {
     public class RoomInformationDAO
     {
-        //public static List<RoomInformation> GetRoomInformations()
-        //{
-        //    RoomInformation r201 = new() { RoomID = 1, RoomTypeID = 1, RoomNumber = "Phòng 201", RoomDescription = "Có 2 phòng ngủ", RoomMaxCapacity = 4, RoomPricePerDate = 200, RoomStatus = "Active" };
-        //    RoomInformation r205 = new() { RoomID = 2, RoomTypeID = 2, RoomNumber = "Phòng 205", RoomDescription = "Có 4 phòng ngủ", RoomMaxCapacity = 2, RoomPricePerDate = 500, RoomStatus = "Active" };
-        //    RoomInformation r208 = new() { RoomID = 3, RoomTypeID = 3, RoomNumber = "Phòng 208", RoomDescription = "Có 2 phòng ngủ", RoomMaxCapacity = 4, RoomPricePerDate = 200, RoomStatus = "Active" };
-        //    var listRoom = new List<RoomInformation>();
-        //    try
-        //    {
-        //        listRoom.Add(r201);
-        //        listRoom.Add(r205);
-        //        listRoom.Add(r208);
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        throw new Exception(e.Message);
-        //    }
-        //    return listRoom;
-        //}
-        public static List<RoomInformation> listRoom = new List<RoomInformation>
-        {
-        new RoomInformation(1,"201","Co 2 phong ngu",4,"Active",200,1),
-        new RoomInformation(2,"202","Co 2 phong ngu",4,"Active",400,2),
-        new RoomInformation(3,"203","Co 2 phong ngu",4,"Active",300,3)
-        };
+
+        private static RoomInformationDAO instance;
+        private readonly FuminiHotelManagementContext dbcontext;
+
         public RoomInformationDAO()
         {
-
-        }
-
-        public static List<RoomInformation> GetRoomInformations()
-        {
-            return listRoom;
-        }
-        public static void SaveRoom(RoomInformation p)
-        {
-            listRoom.Add(p);
-        }
-        public static void UpdateRoom(RoomInformation room)
-        {
-            foreach (RoomInformation p in listRoom.ToList())
+            if (instance == null)
             {
-                if (p.RoomID == room.RoomID)
-                {
-                    p.RoomID = room.RoomID;
-                    p.RoomNumber = room.RoomNumber;
-                    p.RoomDescription = room.RoomDescription;
-                    p.RoomMaxCapacity = room.RoomMaxCapacity;
-                    p.RoomStatus = room.RoomStatus;
-                    p.RoomPricePerDate = room.RoomPricePerDate;
-                    p.RoomTypeID = room.RoomTypeID;
-                }
+                dbcontext = new FuminiHotelManagementContext();
             }
         }
-        public static void DeleteRoom(RoomInformation room)
+        public static RoomInformationDAO Instance()
         {
-            foreach (RoomInformation p in listRoom.ToList())
+            if (instance == null)
             {
-                if (p.RoomID == room.RoomID)
+                instance = new RoomInformationDAO();
+            }
+            return instance;
+        }
+
+        public List<RoomInformation> GetRoomInformations()
+        {
+            return dbcontext.RoomInformations.Include(r=> r.RoomType).ToList();
+        }
+        public void SaveRoom(RoomInformation p)
+        {
+            try
+            {
+                p.RoomStatus = 1;
+                dbcontext.RoomInformations.Add(p);
+                dbcontext.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+        public void UpdateRoom(RoomInformation room)
+        {
+            try
+            {
+                var r = dbcontext.RoomInformations.FirstOrDefault(r => r.RoomId == room.RoomId);
+                r.RoomNumber = room.RoomNumber;
+                r.RoomStatus = room.RoomStatus;
+                r.RoomMaxCapacity = room.RoomMaxCapacity;
+                r.RoomTypeId = room.RoomTypeId;
+                dbcontext.Update(r);
+                dbcontext.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+        public void DeleteRoom(RoomInformation room)
+        {
+            try
+            {
+                bool isRoomIdExists = dbcontext.BookingDetails.Any(b => b.RoomId == room.RoomId);
+
+                if (isRoomIdExists)
                 {
-                    listRoom.Remove(p);
+                    var r = dbcontext.RoomInformations.FirstOrDefault(r => r.RoomId == room.RoomId);
+                    r.RoomStatus = 0;
+                    dbcontext.Update(r);
+                    dbcontext.SaveChanges();
                 }
+                else
+                {
+                    var r = dbcontext.RoomInformations.FirstOrDefault(r => r.RoomId == room.RoomId);
+                    dbcontext.Remove(r);
+                    dbcontext.SaveChanges();
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
             }
         }
 
-        public static RoomInformation GetRoomById(int id)
+        public RoomInformation GetRoomById(int id)
         {
-            foreach (RoomInformation p in listRoom.ToList())
+            RoomInformation r = null;
+            try
             {
-                if (p.RoomID == id)
-                {
-                    return p;
-                }
+                r = dbcontext.RoomInformations.FirstOrDefault(r => r.RoomId == id);
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
             }
             return null;
         }
-        public static List<RoomInformation> SearchRoom(string query)
+        public List<RoomInformation> SearchRoom(string query)
         {
-            return listRoom.Where(r => r.RoomNumber.Contains(query) ||
-                                       r.RoomDescription.Contains(query) ||
-                                       r.RoomStatus.Contains(query)).ToList();
-        }
-        public static int Generateint()
-        {
-            int id = 1;
-            bool check = true;
-            while (check)
+            try
             {
-                check = false;
-                foreach (var item in listRoom)
+                int queryInt;
+                var products = dbcontext.RoomInformations.AsQueryable(); // Start with IQueryable
+
+                // Apply filters based on different conditions
+                if (int.TryParse(query, out queryInt))
                 {
-                    if (item.RoomID == id) { id += 1; check = true; }
+                    products = products.Where(p => p.RoomId == queryInt || p.RoomPricePerDay == queryInt
+                                                || p.RoomMaxCapacity == queryInt);
                 }
+                else
+                {
+                    products = products.Where(p => p.RoomType.RoomTypeName.Contains(query) ||
+                                               p.RoomNumber.Contains(query)||
+                                               p.RoomDetailDescription.Contains(query));
+                }
+                return products.ToList();
             }
-            return id;
+            catch (Exception ex)
+            {
+                throw new Exception("Error searching for products: " + ex.Message);
+            }
         }
     }
 }

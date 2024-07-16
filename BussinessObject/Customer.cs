@@ -1,39 +1,23 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace BussinessObject
+namespace BussinessObject;
+
+public partial class Customer
 {
-    public class Customer
-    {
-        public int CustomerID { get; set; }
-        public string? CustomerFullName { get; set; }
-        public string? Telephone { get; set; }
-        public string? EmailAddress { get; set; }
-        public DateTime? CustomerBirthday { get; set; }
-        public string? CustomerStatus { get; set; }
-        public string? Password { get; set; }
-        public Customer() { }
-        public Customer(int customerID, string? customerFullName, string? telephone, string? emailAddress, DateTime? customerBirthday, string? customerStatus, string? password)
-        {
-            CustomerID = customerID;
-            CustomerFullName = customerFullName;
-            Telephone = telephone;
-            EmailAddress = emailAddress;
-            CustomerBirthday = customerBirthday;
-            CustomerStatus = customerStatus;
-            Password = password;
-        }
+    public int CustomerId { get; set; }
 
-        public virtual ICollection<BookingReservation> BookingReservations { get; set; } = new List<BookingReservation>();
+    public string? CustomerFullName { get; set; }
 
-        public override string? ToString()
-        {
-            return base.ToString();
-        }
-    }
+    public string? Telephone { get; set; }
 
+    public string EmailAddress { get; set; } = null!;
+
+    public DateOnly? CustomerBirthday { get; set; }
+
+    public byte? CustomerStatus { get; set; }
+
+    public string? Password { get; set; }
+
+    public virtual ICollection<BookingReservation> BookingReservations { get; set; } = new List<BookingReservation>();
 }

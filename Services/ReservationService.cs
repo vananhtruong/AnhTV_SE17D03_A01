@@ -17,12 +17,11 @@ namespace Services
             _reservationRepository = new ReservationRepository();
         }
 
-        public bool AddReservations(Reservation reservation) => _reservationRepository.AddReservations(reservation);
+        public bool AddReservations(BookingReservation reservation, List<BookingDetail> bookingDetails) => _reservationRepository.AddReservations(reservation, bookingDetails);
 
-        public List<Reservation> GetReservations() => _reservationRepository.GetReservations();
+        public List<BookingReservation> GetReservations() => _reservationRepository.GetReservations();
 
-        public List<Reservation> GetReservationsByCustomerId(int customerId) => _reservationRepository.GetReservationsByCustomerId(customerId);
-
-        public List<Reservation> Search(DateTime startDate, DateTime endDate) => _reservationRepository.Search(startDate, endDate);
+        public List<BookingReservation> GetReservationsByCustomerId(int customerId) => _reservationRepository.GetReservationsByCustomerId(customerId);
+        public void UpdateBooking(BookingReservation bk) => _reservationRepository.UpdateBooking(bk);
     }
 }

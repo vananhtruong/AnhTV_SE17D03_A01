@@ -21,7 +21,7 @@ namespace WPFApp
                 txtFullName.Text = customer.CustomerFullName;
                 txtTelephone.Text = customer.Telephone;
                 txtEmail.Text = customer.EmailAddress;
-                dpBirthday.SelectedDate = customer.CustomerBirthday;
+                dpBirthday.SelectedDate = customer.CustomerBirthday?.ToDateTime(TimeOnly.MinValue);
                 txtPassword.Text = customer.Password;
             }
             else
@@ -39,12 +39,11 @@ namespace WPFApp
                 !string.IsNullOrEmpty(txtPassword.Text))
             {
                 // All fields are filled, proceed with assigning values
-                Customer.CustomerID = CustomerDAO.GenerateID();
                 Customer.CustomerFullName = txtFullName.Text;
                 Customer.Telephone = txtTelephone.Text;
                 Customer.EmailAddress = txtEmail.Text;
-                Customer.CustomerBirthday = dpBirthday.SelectedDate;
-                Customer.CustomerStatus = "Active";
+                Customer.CustomerBirthday = DateOnly.FromDateTime(dpBirthday.SelectedDate.Value);
+                Customer.CustomerStatus =1;
                 Customer.Password = txtPassword.Text;
 
                 DialogResult = true;

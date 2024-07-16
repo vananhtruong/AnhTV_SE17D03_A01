@@ -1,12 +1,12 @@
-﻿<UserControl x:Class="WPFApp.BookingManagement"
-                      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-         xmlns:local="clr-namespace:WPFApp"
-         mc:Ignorable="d" 
-         Loaded="UserControl_Loaded"
-         d:DesignHeight="450" d:DesignWidth="600">
+﻿<UserControl x:Class="WPFApp.BookingHistory"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WPFApp"
+             mc:Ignorable="d" 
+             Loaded="UserControl_Loaded"
+             d:DesignHeight="450" d:DesignWidth="600">
     <UserControl.Background>
         <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
             <GradientStop Color="LightBlue" Offset="0.0"/>
@@ -51,9 +51,11 @@
         </DataGrid>
 
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="10" Grid.Row="2">
+            <Button Content="Add" Click="btnAdd_Click" Margin="5"/>
             <Button Content="View" Click="btnView_Click" Margin="5" />
-
+            <Button Content="Delete" Click="btnDelete_Click" Margin="5"/>
+            
         </StackPanel>
-
+        
     </Grid>
 </UserControl>

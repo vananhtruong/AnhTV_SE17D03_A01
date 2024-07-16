@@ -9,9 +9,9 @@ namespace Repositories
 {
     public interface IReservationRepository
     {
-        List<Reservation> GetReservations();
-        List<Reservation> GetReservationsByCustomerId(int customerId);
-        List<Reservation> Search(DateTime startDate, DateTime endDate);
-        bool AddReservations(Reservation reservation); 
+        List<BookingReservation> GetReservations();
+        List<BookingReservation> GetReservationsByCustomerId(int customerId);
+        bool AddReservations(BookingReservation reservation, List<BookingDetail> bookingDetails); 
+        void UpdateBooking(BookingReservation reservation);
     }
 }

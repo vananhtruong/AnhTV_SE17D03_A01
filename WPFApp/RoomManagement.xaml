@@ -66,16 +66,16 @@
             <TextBox x:Name="txtSearch" Width="200"/>
             <Button Content="Search" Click="btnSearch_Click"/>
         </StackPanel>
-
-        <DataGrid x:Name="dgRooms" AutoGenerateColumns="False" CanUserAddRows="False" Grid.Row="1" SelectionMode="Single" >
+        <DataGrid></DataGrid>
+        <DataGrid x:Name="dgRooms" AutoGenerateColumns="False" IsReadOnly="True"  CanUserAddRows="False" Grid.Row="1" Height="450"  SelectionMode="Single" >
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Room ID" Binding="{Binding RoomID}" Width="SizeToHeader"/>
+                <DataGridTextColumn Header="Room ID" Binding="{Binding RoomId}" Width="SizeToHeader"/>
                 <DataGridTextColumn Header="Room Number" Binding="{Binding RoomNumber}" Width="SizeToHeader"/>
-                <DataGridTextColumn Header="Description" Binding="{Binding RoomDescription}" Width="SizeToHeader"/>
+                <DataGridTextColumn Header="Description" Binding="{Binding RoomDetailDescription}" Width="SizeToHeader"/>
                 <DataGridTextColumn Header="Max Capacity" Binding="{Binding RoomMaxCapacity}" Width="SizeToHeader"/>
                 <DataGridTextColumn Header="Status" Binding="{Binding RoomStatus}" Width="SizeToHeader"/>
-                <DataGridTextColumn Header="Price Per Day" Binding="{Binding RoomPricePerDate, StringFormat=C}" Width="SizeToHeader"/>
-                <DataGridTextColumn Header="Type" Binding="{Binding RoomTypeID}" Width="SizeToHeader"/>
+                <DataGridTextColumn Header="Price Per Day" Binding="{Binding RoomPricePerDay, StringFormat=C}" Width="SizeToHeader"/>
+                <DataGridTextColumn Header="Type" Binding="{Binding RoomType.RoomTypeName}" Width="*"/>
             </DataGrid.Columns>
         </DataGrid>
 

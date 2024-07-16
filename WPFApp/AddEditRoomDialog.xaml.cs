@@ -21,14 +21,14 @@ namespace WPFApp
             {
                 Room = room;
                 txtRoomNumber.Text = room.RoomNumber;
-                txtDescription.Text = room.RoomDescription;
+                txtDescription.Text = room.RoomDetailDescription;
                 txtMaxCapacity.Text = room.RoomMaxCapacity.ToString(); ;
-                txtPrice.Text = room.RoomPricePerDate.ToString();
-                cboRoomType.SelectedValue = room.RoomTypeID;
+                txtPrice.Text = room.RoomPricePerDay.ToString();
                 var typeList = roomTypeService.GetRoomTypes();
                 cboRoomType.ItemsSource = typeList;
                 cboRoomType.DisplayMemberPath = "RoomTypeName";
-                cboRoomType.SelectedValuePath = "RoomTypeID"; 
+                cboRoomType.SelectedValuePath = "RoomTypeId";
+                cboRoomType.SelectedValue = room.RoomTypeId;
             }
             else
             {
@@ -36,7 +36,7 @@ namespace WPFApp
                 var typeList = roomTypeService.GetRoomTypes();
                 cboRoomType.ItemsSource = typeList;
                 cboRoomType.DisplayMemberPath = "RoomTypeName";
-                cboRoomType.SelectedValuePath = "RoomTypeID";
+                cboRoomType.SelectedValuePath = "RoomTypeId";
             }
         }
 
@@ -49,13 +49,13 @@ namespace WPFApp
                 !string.IsNullOrEmpty(txtPrice.Text) &&
                 !string.IsNullOrEmpty(cboRoomType.Text))
             {
-                // All text fields are not null or empty, proceed with assigning values
                 Room.RoomNumber = txtRoomNumber.Text;
-                Room.RoomDescription = txtDescription.Text;
+                Room.RoomDetailDescription = txtDescription.Text;
                 Room.RoomMaxCapacity = int.Parse(txtMaxCapacity.Text);
-                Room.RoomStatus = "Active";
-                Room.RoomPricePerDate = decimal.Parse(txtPrice.Text);
-                Room.RoomTypeID =  (int)cboRoomType.SelectedValue; 
+                Room.RoomStatus = 1;
+                Room.RoomPricePerDay = decimal.Parse(txtPrice.Text);
+                Room.RoomTypeId =  (int)cboRoomType.SelectedValue;
+                //Room.RoomType =(RoomType) cboRoomType.SelectedItem;
 
                 DialogResult = true;
                 Close();

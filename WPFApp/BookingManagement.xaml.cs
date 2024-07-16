@@ -22,56 +22,45 @@ namespace WPFApp
     /// </summary>
     public partial class BookingManagement : UserControl
     {
-        private readonly IReservationService _reservationService;
+        private readonly IReservationService booking;
         public BookingManagement()
         {
             InitializeComponent();
-            _reservationService = new ReservationService();
+            booking = new ReservationService();
         }
-        public void LoadReservations(List<Reservation> res = null)
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            try
+            LoadData();
+        }
+
+        private void LoadData()
+        {
+            List<BookingReservation> bookingDetails = booking.GetReservations();
+            dgBookingHistory.ItemsSource = null;
+            dgBookingHistory.ItemsSource = bookingDetails;
+        }
+        private void btnView_Click(object sender, RoutedEventArgs e)
+        {
+            if (dgBookingHistory.SelectedItem is BookingReservation selectedBooking)
             {
-                List<Reservation> reservations;
-                if (res != null)
+                if (MessageBox.Show($"Are you sure you want to view detail of booking {selectedBooking.BookingReservationId}?", "Confirm Delete", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
                 {
-                    reservations = res;
+                    ViewBookingDetailDialog detailDialog = new ViewBookingDetailDialog
+                    {
+                        idbooking = selectedBooking.BookingReservationId
+                    };
+                    detailDialog.Load(); // Gọi Load() sau khi gán giá trị
+                    detailDialog.ShowDialog();
                 }
-                else
-                {
-                    reservations = _reservationService.GetReservations();
-                }
-                dgData.ItemsSource = null;
-                dgData.ItemsSource = reservations;
             }
-            catch (Exception ex)
+            else
             {
-                MessageBox.Show(ex.Message, "Error on load list of reservations");
+                MessageBox.Show("Please select a booking to delete.", "Delete Booking", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
-        private void ResetInput()
+        private void dgBookingHistory_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            dpStartDay.Text = "";
-            dpEndDay.Text = "";
-        }
-        
-        private void btnSearch_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                DateTime startDate =(DateTime) dpStartDay.SelectedDate;
-                DateTime endDate = (DateTime)dpEndDay.SelectedDate;
-                var reservations = _reservationService.Search(startDate, endDate);
-                LoadReservations(reservations);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            LoadReservations();
+
         }
     }
 }

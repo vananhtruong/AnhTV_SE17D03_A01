@@ -1,4 +1,5 @@
 ﻿using BussinessObject;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,80 +10,114 @@ namespace DataAccessLayer
 {
     public class CustomerDAO
     {
-        public static List<Customer> listCustomer = new List<Customer>
-        {
-            new Customer(1, "Thao Huong", "0123456789", "abc@gmail.com", new DateTime(2003, 5, 15), "Active", "123"),
-            new Customer(3, "Truong Van Anh", "0123456789", "123", new DateTime(2003, 5, 15), "Active", "123"),
-            new Customer(2, "Thu Ha", "0987654321", "help@gmail.com", new DateTime(2003, 7, 15), "Active", "456")
-        };
+        private static CustomerDAO instance;
+        private readonly FuminiHotelManagementContext dbcontext;
 
-        public static List<Customer> GetCustomers()
+        private CustomerDAO()
         {
-            return listCustomer;
-        }
-
-        public static void SaveCustomer(Customer customer)
-        {
-            listCustomer.Add(customer);
-        }
-        //public static void UpdateCustomer(Customer customer)
-        //{
-        //    foreach (Customer p in listCustomer.ToList())
-        //    {
-        //        if (p.CustomerID == customer.CustomerID)
-        //        {
-        //            p.CustomerID = customer.CustomerID;
-        //            p.CustomerFullName = customer.CustomerFullName;
-        //            p.Telephone = customer.Telephone;
-        //            p.EmailAddress = customer.EmailAddress;
-        //            p.CustomerBirthday = customer.CustomerBirthday;
-        //            p.CustomerStatus = customer.CustomerStatus;
-        //            p.Password = customer.Password;
-        //        }
-        //    }
-        //}
-        public static bool UpdateCustomer(Customer customer)
-        {
-            bool isUpdated = false;
-            foreach (Customer p in listCustomer.ToList())
+            if (instance == null)
             {
-                if (p.CustomerID == customer.CustomerID)
+                dbcontext = new FuminiHotelManagementContext();
+            }
+        }
+
+        //instance singleton
+        public static CustomerDAO getInstance()
+        {
+            if (instance == null)
+            {
+                instance = new CustomerDAO();
+            }
+            return instance;
+        }
+
+
+
+        public List<Customer> GetCustomers()
+        {
+            var list = new List<Customer>();
+            try
+            {
+                list = dbcontext.Customers.ToList();
+
+                var sortedListAscending = list.OrderBy(c => c.CustomerFullName).ToList(); // tang dan
+                var sortedListDescending = list.OrderByDescending(c => c.CustomerFullName).ToList();// giam dan
+                var sortedListAscendingByDate = list.OrderBy(c => c.CustomerBirthday).ToList();
+
+
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return list;
+        }
+
+        public void SaveCustomer(Customer customer)
+        {
+            try
+            {
+                
+                if(customer!=null)
                 {
-                    p.CustomerID = customer.CustomerID;
-                    p.CustomerFullName = customer.CustomerFullName;
-                    p.Telephone = customer.Telephone;
-                    p.EmailAddress = customer.EmailAddress;
-                    p.CustomerBirthday = customer.CustomerBirthday;
-                    p.CustomerStatus = customer.CustomerStatus;
-                    p.Password = customer.Password;
-                    isUpdated = true; 
-                    break; 
+                    dbcontext.Add(customer);
+                    dbcontext.SaveChanges();
                 }
             }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+        
+        public  bool UpdateCustomer(Customer customer)
+        {
+            bool isUpdated = false;
+            try
+            {
+                if (customer != null)
+                {
+                    dbcontext.Update(customer);
+                    dbcontext.SaveChanges();
+                    isUpdated = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            
             return isUpdated;
         }
 
-        public static void DeleteCustomer(int customerId)
+        public void DeleteCustomer(int customerId)
         {
-            foreach (Customer p in listCustomer.ToList())
+            try
             {
-                if (p.CustomerID == customerId)
+                if (customerId != null)
                 {
-                    listCustomer.Remove(p);
+                    var customer = dbcontext.Customers.FirstOrDefault(x => x.CustomerId == customerId);
+                    dbcontext.Remove(customer);
+                    dbcontext.SaveChanges();
                 }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
             }
         }
 
-        public static List<Customer> SearchCustomers(string query)
+        public List<Customer> SearchCustomers(string query)
         {
-            return listCustomer.Where(c => c.CustomerFullName.Contains(query) ||
+            return dbcontext.Customers.Where(c => c.CustomerFullName.Contains(query) ||
                                            c.EmailAddress.Contains(query) ||
                                            c.Telephone.Contains(query)).ToList();
         }
-        public static Customer CheckLogin(string email, string password)
+        public  Customer CheckLogin(string email, string password)
         {
             Customer customer = null;
-            foreach (Customer p in listCustomer.ToList())
+            foreach (Customer p in dbcontext.Customers.ToList())
             {
                 if (p.EmailAddress == email)
                 {
@@ -95,42 +130,22 @@ namespace DataAccessLayer
         public static bool UpdateProfile(Customer customer)
         {
             bool isUpdated = false;
-            foreach (Customer p in listCustomer.ToList())
+            try
             {
-                if (p.CustomerID == customer.CustomerID)
+                if (customer != null)
                 {
-                    p.CustomerID = customer.CustomerID;
-                    p.CustomerFullName = customer.CustomerFullName;
-                    p.Telephone = customer.Telephone;
-                    p.EmailAddress = customer.EmailAddress;
-                    p.CustomerBirthday = customer.CustomerBirthday;
-                    p.CustomerStatus = customer.CustomerStatus;
-                    p.Password = customer.Password;
+                    instance.dbcontext.Update(customer);
+                    instance.dbcontext.SaveChanges();
                     isUpdated = true;
-                    break;
                 }
             }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
             return isUpdated;
 
-        }
-        public static int GenerateID()
-        {
-            int id = 1;
-            bool check = true;
-            while (check)
-            {
-                check = false;
-                foreach (var item in listCustomer)
-                {
-                    if (item.CustomerID == id) { id += 1; check = true; }
-                }
-            }
-
-            
-
-
-
-            return id;
         }
     }
 }

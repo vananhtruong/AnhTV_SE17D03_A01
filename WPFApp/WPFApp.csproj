@@ -25,10 +25,4 @@
     </None>
   </ItemGroup>
 
-  <ItemGroup>
-    <Page Update="BookingRoom.xaml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Page>
-  </ItemGroup>
-
 </Project>

@@ -22,13 +22,13 @@ namespace WPFApp
             {
                 profileManagement.Customer = customer;
             }
-            if (bookingRoom != null)
+            //if (bookingRoom != null)
+            //{
+            //    bookingRoom.Customer = customer;
+            //}
+            if (bookingHistory != null)
             {
-                bookingRoom.Customer = customer;
-            }
-            if (historyBooking != null)
-            {
-                historyBooking.Customer = customer;
+                bookingHistory.Customer = customer;
             }
 
 

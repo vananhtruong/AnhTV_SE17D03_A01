@@ -10,12 +10,12 @@ namespace Repositories
 {
     public class ReservationRepository : IReservationRepository
     {
-        public bool AddReservations(Reservation reservation) => ReservationDAO.AddReservation(reservation);
+        public bool AddReservations(BookingReservation reservation, List<BookingDetail> bookingDetails) => ReservationDAO.Instance().AddReservations(reservation, bookingDetails);
 
-        public List<Reservation> GetReservations() => ReservationDAO.GetReservations();
+        public List<BookingReservation> GetReservations() => ReservationDAO.Instance().GetReservations();
 
-        public List<Reservation> GetReservationsByCustomerId(int customerId) => ReservationDAO.GetReservationByCustomerId(customerId);
+        public List<BookingReservation> GetReservationsByCustomerId(int customerId) => ReservationDAO.Instance().GetReservationByCustomerId(customerId);
+        public void UpdateBooking(BookingReservation bk)=> ReservationDAO.Instance().UpdateBooking(bk);
 
-        public List<Reservation> Search(DateTime startDate, DateTime endDate) => ReservationDAO.SearchReservations(startDate, endDate);
     }
 }
